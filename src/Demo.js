@@ -4,9 +4,6 @@ const Demo = () => {
 
     const [total, setTotal] = useState(30)
 
-    // const getter = stateArray[0] // getter
-    // const setter = stateArray(1) // setter
-
     return (
         <>
             <div>Toplam Rakam: {total}</div>

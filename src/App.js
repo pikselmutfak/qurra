@@ -5,6 +5,7 @@ import Button from './Button'
 import List from './List';
 
 import Demo from './Demo';
+import DemoInput from './DemoInput';
 
 const App = () => {
   return (
