@@ -66,20 +66,6 @@ const List = () => {
         setUpdateIndex(-1)
     }
 
-    const updateUser = () => {
-        const newList = userList.map((user, index) => {
-
-            if (index === updateIndex) {
-                return newUser
-            }
-
-            return user
-        })
-
-        setUserList(newList)
-        resetForm()
-    }
-
     return (
         <>
         {
@@ -90,54 +76,20 @@ const List = () => {
             )
         }
         {
-            userList.map((user, index) => {
-
-                return updateIndex === index ? (
-
-                    <div>
-                        <input 
-                            placeholder="Ad"
-                            value={newUser.firstName} 
-                            onChange={(e) => {
-                                const firstName = e.target.value
-                                const updatedUser = {
-                                    ...newUser,
-                                    firstName
-                                }
-                                setNewUser(updatedUser)
-                        }} />
-                        <input 
-                            placeholder="Soyad"
-                            value={newUser.lastName} 
-                            onChange={(e) => {
-                                const lastName = e.target.value
-                                const updatedUser = {
-                                    ...newUser,
-                                    lastName
-                                }
-                                setNewUser(updatedUser)
-                        }} />
-                        <Button title="Kaydet" onClick={updateUser} />
-                        <Button title="Vazgeç" onClick={() => {
-                            resetForm()
-                        }} />
-                    </div>
-
-                ) : (
-                    <User 
-                        key={index} 
-                        data={user} 
-                        index={index} 
-                        onSelect={(user) => {
-                            console.log('list level', user)
-                            setSelectedUser(user)
-                        }}
-                        onUpdate={(index) => {
-                            setUpdateIndex(index)
-                        }}
-                    />
-                )
-            })
+            userList.map((user, index) => (
+                <User 
+                    key={index} 
+                    data={user} 
+                    index={index} 
+                    onSelect={(user) => {
+                        console.log('list level', user)
+                        setSelectedUser(user)
+                    }}
+                    onUpdate={(index) => {
+                        setUpdateIndex(index)
+                    }}
+                />
+            ))
         }
         <div style={{
             marginTop: 20
@@ -200,7 +152,16 @@ const List = () => {
                     } else {
                         // GÜNCELLE
 
-                        updateUser()
+                        const newList = userList.map((user, index) => {
+
+                            if (index === updateIndex) {
+                                return newUser
+                            }
+
+                            return user
+                        })
+
+                        setUserList(newList)
                     }
 
                     resetForm()
