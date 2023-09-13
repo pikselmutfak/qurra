@@ -4,7 +4,8 @@ const User = ({
     data,
     index,
     onSelect,
-    onUpdate
+    onUpdate,
+    onRemove
 }) => {
 
     const imgSize = 70
@@ -56,6 +57,11 @@ const User = ({
                 <Button onClick={() => {
                     onUpdate(index)
                 }} title="Güncelle" />
+            </div>
+            <div>
+                <Button onClick={() => {
+                    onRemove(index)
+                }} title="Sil" />
             </div>
         </div>
     )

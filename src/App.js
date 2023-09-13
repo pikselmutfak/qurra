@@ -6,6 +6,7 @@ import List from './List';
 
 import Demo from './Demo';
 import DemoInput from './DemoInput';
+import DemoSelect from './DemoSelect';
 
 const App = () => {
   return (

@@ -1,6 +1,12 @@
 import Button from "./Button"
-import {useState, useEffect} from 'react'
-import User from "./User"
+import { useState, useEffect } from 'react'
+
+import {
+    Table,
+    Form,
+} from 'react-bootstrap'
+
+import Modal from "./Modal"
 
 const List = () => {
 
@@ -11,7 +17,10 @@ const List = () => {
         age: 32
     }
 
+    const [showModal, setShowModal] = useState(false)
+
     const [updateIndex, setUpdateIndex] = useState(-1)
+    const [removeIndex, setRemoveIndex] = useState(-1)
 
     const [selectedUser, setSelectedUser] = useState(undefined)
     const [newUser, setNewUser] = useState(newUserTemplate)
@@ -51,6 +60,10 @@ const List = () => {
     }, [])
 
     useEffect(() => {
+        console.log(`${removeIndex} sırasındaki satır silinecek, onay bekliyor`)
+    }, [removeIndex])
+
+    useEffect(() => {
         console.log(`${updateIndex} sırasındaki satır güncellenecek`)
 
         if (updateIndex !== -1) {
@@ -82,139 +95,198 @@ const List = () => {
 
     return (
         <>
-        {
-            selectedUser && (
-                <div>
-                    <div>Seçili Kullanıcı: {selectedUser.firstName}</div>
-                </div>
-            )
-        }
-        {
-            userList.map((user, index) => {
-
-                return updateIndex === index ? (
-
+            {
+                selectedUser && (
                     <div>
-                        <input 
-                            placeholder="Ad"
-                            value={newUser.firstName} 
-                            onChange={(e) => {
-                                const firstName = e.target.value
-                                const updatedUser = {
-                                    ...newUser,
-                                    firstName
-                                }
-                                setNewUser(updatedUser)
-                        }} />
-                        <input 
-                            placeholder="Soyad"
-                            value={newUser.lastName} 
-                            onChange={(e) => {
-                                const lastName = e.target.value
-                                const updatedUser = {
-                                    ...newUser,
-                                    lastName
-                                }
-                                setNewUser(updatedUser)
-                        }} />
-                        <Button title="Kaydet" onClick={updateUser} />
-                        <Button title="Vazgeç" onClick={() => {
-                            resetForm()
-                        }} />
+                        <div>Seçili Kullanıcı: {selectedUser.firstName}</div>
                     </div>
-
-                ) : (
-                    <User 
-                        key={index} 
-                        data={user} 
-                        index={index} 
-                        onSelect={(user) => {
-                            console.log('list level', user)
-                            setSelectedUser(user)
-                        }}
-                        onUpdate={(index) => {
-                            setUpdateIndex(index)
-                        }}
-                    />
                 )
-            })
-        }
-        <div style={{
-            marginTop: 20
-        }}>
-            <div><input placeholder="Ad" value={newUser.firstName} onChange={(e) => {
-                const firstName = e.target.value
+            }
+            <Table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th></th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Age</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        userList.map((user, index) => {
 
-                const updatedUser = {
-                    ...newUser,
-                    firstName
-                }
+                            return updateIndex === index ? (
 
-                setNewUser(updatedUser)
-            }} /></div>
-            <div><input placeholder="Soyad" value={newUser.lastName} onChange={(e) => {
-                const lastName = e.target.value
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <Form.Control 
+                                            placeholder="Ad"
+                                            value={newUser.firstName} 
+                                            onChange={(e) => {
+                                                const firstName = e.target.value
+                                                const updatedUser = {
+                                                    ...newUser,
+                                                    firstName
+                                                }
+                                                setNewUser(updatedUser)
+                                        }} />
+                                    </td>
+                                    <td>
+                                    <Form.Control 
+                                            placeholder="Soyad"
+                                            value={newUser.lastName} 
+                                            onChange={(e) => {
+                                                const lastName = e.target.value
+                                                const updatedUser = {
+                                                    ...newUser,
+                                                    lastName
+                                                }
+                                                setNewUser(updatedUser)
+                                        }} />
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <Button title="Kaydet" onClick={updateUser} />
+                                    </td>
+                                    <td>
+                                        <Button title="Vazgeç" onClick={() => {
+                                            resetForm()
+                                        }} />
+                                    </td>
+                                </tr>
 
-                const updatedUser = {
-                    ...newUser,
-                    lastName
-                }
-
-                setNewUser(updatedUser)
-            }} /></div>
+                            ) : (
+                                <tr>
+                                    <td>{index+1}</td>
+                                    <td>
+                                        <img
+                                            src={user.image}
+                                            alt={user.firstName}
+                                            style={{
+                                                width: 60,
+                                                height: 60,
+                                                borderRadius: 30
+                                            }}
+                                        />
+                                    </td>
+                                    <td>{user.firstName}</td>
+                                    <td>{user.lastName}</td>
+                                    <td>{user.age}</td>
+                                    <td>
+                                        <Button title="Güncelle" onClick={() => {
+                                            setUpdateIndex(index)
+                                        }} />
+                                    </td>
+                                    <td>
+                                        <Button title="Sil" onClick={() => {
+                                            setShowModal(true)
+                                            setRemoveIndex(index)
+                                        }} />
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </Table>
             <div style={{
-                display: 'flex',
-                flexDirection: 'row'
+                marginTop: 20
             }}>
-                <div>Yaş:</div>
-                <select onChange={(e) => {
-                    console.log('kullanıcı seçim yaptı', e.target.value)
-                    const age = e.target.value
+                <div><input placeholder="Ad" value={newUser.firstName} onChange={(e) => {
+                    const firstName = e.target.value
 
                     const updatedUser = {
                         ...newUser,
-                        age
+                        firstName
                     }
-    
+
                     setNewUser(updatedUser)
-                }}>
-                    <option value={20}>20</option>
-                    <option value={30}>30</option>
-                    <option value={40}>40</option>
-                    <option value={50}>50</option>
-                </select>
-            </div>
-            <div>
-                <Button title={updateIndex === -1 ? "Kaydet" : "Değişiklikleri Kaydet"} onClick={() => {
+                }} /></div>
+                <div><input placeholder="Soyad" value={newUser.lastName} onChange={(e) => {
+                    const lastName = e.target.value
 
-                    if (updateIndex === -1) {
-                        // KAYDET
-                        console.log('new user', newUser)
-
-                        const newList = [
-                            ...userList,
-                            newUser
-                        ]
-
-                        setUserList(newList)
-                    } else {
-                        // GÜNCELLE
-
-                        updateUser()
+                    const updatedUser = {
+                        ...newUser,
+                        lastName
                     }
 
-                    resetForm()
-                }} />
-                {
-                    updateIndex !== -1 && (
-                        <Button title="Vazgeç" onClick={() => {
-                            setUpdateIndex(-1)
-                        }} />
-                    )
-                }
-            </div>
-        </div>
+                    setNewUser(updatedUser)
+                }} /></div>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row'
+                }}>
+                    <div>Yaş:</div>
+                    <select onChange={(e) => {
+                        console.log('kullanıcı seçim yaptı', e.target.value)
+                        const age = e.target.value
 
+                        const updatedUser = {
+                            ...newUser,
+                            age
+                        }
+
+                        setNewUser(updatedUser)
+                    }}>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                    </select>
+                </div>
+                <div>
+                    <Button title={updateIndex === -1 ? "Kaydet" : "Değişiklikleri Kaydet"} onClick={() => {
+
+                        if (updateIndex === -1) {
+                            // KAYDET
+                            console.log('new user', newUser)
+
+                            const newList = [
+                                ...userList,
+                                newUser
+                            ]
+
+                            setUserList(newList)
+                        } else {
+                            // GÜNCELLE
+
+                            updateUser()
+                        }
+
+                        resetForm()
+                    }} />
+                    {
+                        updateIndex !== -1 && (
+                            <Button title="Vazgeç" onClick={() => {
+                                setUpdateIndex(-1)
+                            }} />
+                        )
+                    }
+                </div>
+            </div>
+            <Modal 
+                title="Emin misin ?" 
+                body={`${userList[removeIndex]?.firstName} silinecektir.`}  
+                show={showModal}
+                onClose={(isOk) => {
+
+                    if (isOk) {
+                        const updatedList = userList.filter((user, i) => {
+                            return removeIndex !== i
+                        })
+
+                        setUserList(updatedList)
+                        setRemoveIndex(-1)
+                    }
+
+                    setShowModal(false)
+                }}
+            />
         </>
     )
 }
