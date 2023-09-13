@@ -1,5 +1,6 @@
 import Button from "./Button"
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+import User from "./User"
 
 const List = () => {
 
@@ -9,6 +10,8 @@ const List = () => {
         image: "https://i.imgur.com/nRkdyKG.jpeg",
         age: 32
     }
+
+    const [updateIndex, setUpdateIndex] = useState(-1)
 
     const [selectedUser, setSelectedUser] = useState(undefined)
     const [newUser, setNewUser] = useState(newUserTemplate)
@@ -39,6 +42,30 @@ const List = () => {
         }
     ])
 
+    useEffect(() => {
+        console.log('userList state değişti', userList)
+    }, [userList, newUser])
+
+    useEffect(() => {
+        console.log('uygulama ilk kez ayağa kalktı')
+    }, [])
+
+    useEffect(() => {
+        console.log(`${updateIndex} sırasındaki satır güncellenecek`)
+
+        if (updateIndex !== -1) {
+            console.log('güncelleme gerçekleşecek')
+            setNewUser(userList[updateIndex])
+        } else {
+            setNewUser(newUserTemplate)
+        }
+    }, [updateIndex])
+
+    const resetForm = () => {
+        setNewUser(newUserTemplate)
+        setUpdateIndex(-1)
+    }
+
     return (
         <>
         {
@@ -50,10 +77,18 @@ const List = () => {
         }
         {
             userList.map((user, index) => (
-                <User data={user} index={index} key={index} onSelect={(user) => {
-                    console.log('list level', user)
-                    setSelectedUser(user)
-                }} />
+                <User 
+                    key={index} 
+                    data={user} 
+                    index={index} 
+                    onSelect={(user) => {
+                        console.log('list level', user)
+                        setSelectedUser(user)
+                    }}
+                    onUpdate={(index) => {
+                        setUpdateIndex(index)
+                    }}
+                />
             ))
         }
         <div style={{
@@ -102,76 +137,46 @@ const List = () => {
                 </select>
             </div>
             <div>
-                <Button title="Kaydet" onClick={() => {
-                    console.log('new user', newUser)
+                <Button title={updateIndex === -1 ? "Kaydet" : "Değişiklikleri Kaydet"} onClick={() => {
 
-                    const newList = [
-                        ...userList,
-                        newUser
-                    ]
+                    if (updateIndex === -1) {
+                        // KAYDET
+                        console.log('new user', newUser)
 
-                    setUserList(newList)
-                    setNewUser(newUserTemplate)
+                        const newList = [
+                            ...userList,
+                            newUser
+                        ]
+
+                        setUserList(newList)
+                    } else {
+                        // GÜNCELLE
+
+                        const newList = userList.map((user, index) => {
+
+                            if (index === updateIndex) {
+                                return newUser
+                            }
+
+                            return user
+                        })
+
+                        setUserList(newList)
+                    }
+
+                    resetForm()
                 }} />
+                {
+                    updateIndex !== -1 && (
+                        <Button title="Vazgeç" onClick={() => {
+                            setUpdateIndex(-1)
+                        }} />
+                    )
+                }
             </div>
         </div>
 
         </>
-    )
-}
-
-const User = ({
-    data,
-    index,
-    onSelect
-}) => {
-
-    const imgSize = 70
-
-    const getImageBorderRadius = (imageSize) => {
-        return (imageSize/2) - 30
-    }
-
-    const {
-        firstName,
-        lastName,
-        age,
-        image
-    } = data
-
-    return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center'
-        }}>
-            <div>{index+1}</div>
-            <div>
-                <img src={image} style={{
-                    width: imgSize,
-                    height: imgSize,
-                    borderRadius: getImageBorderRadius(imgSize)
-                }} alt={firstName} />
-            </div>
-            <div>{firstName}</div>
-            <div>{lastName}</div>
-            <div>{age}</div>
-            <div>
-            {
-                age < 40 ? (
-                    <div>Yaş Küçük</div>
-                ) : (
-                    <div>Yaş Uygun</div>
-                )
-            }
-            </div>
-            <div>
-                <Button onClick={() => {
-                    console.log('button clicked', firstName)
-                    onSelect(data)
-                }} title="Seç" />
-            </div>
-        </div>
     )
 }
 
