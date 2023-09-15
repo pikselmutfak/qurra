@@ -15,6 +15,8 @@ const Modal = ({
 
     return (
         <RModal show={show} onHide={() => {
+
+            // sdk kapanma aksiyonu
             onClose(false)
         }}>
             <RModal.Header closeButton>

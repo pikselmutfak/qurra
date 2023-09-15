@@ -1,14 +1,22 @@
 import Button from "./Button"
 import { useState, useEffect } from 'react'
+import axios from "axios"
 
 import {
     Table,
     Form,
+    Spinner
 } from 'react-bootstrap'
+
+import {
+    useNavigate
+} from 'react-router-dom'
 
 import Modal from "./Modal"
 
 const List = () => {
+
+    const navigate = useNavigate()
 
     const newUserTemplate = {
         firstName: "",
@@ -17,6 +25,8 @@ const List = () => {
         age: 32
     }
 
+    const [isLoading, setLoading] = useState(false)
+
     const [showModal, setShowModal] = useState(false)
 
     const [updateIndex, setUpdateIndex] = useState(-1)
@@ -24,39 +34,38 @@ const List = () => {
 
     const [selectedUser, setSelectedUser] = useState(undefined)
     const [newUser, setNewUser] = useState(newUserTemplate)
-    const [userList, setUserList] = useState([
-        {
-            firstName: "Kazım",
-            lastName: "Etiksan",
-            image: "https://i.imgur.com/rmNWp90.jpeg",
-            age: 43
-        },
-        {
-            firstName: "Leyla",
-            lastName: "Demir",
-            image: "https://i.imgur.com/lxzUnpb.jpeg",
-            age: 45
-        },
-        {
-            firstName: "Hasan",
-            lastName: "Tekin",
-            image: "https://i.imgur.com/nRkdyKG.jpeg",
-            age: 37
-        },
-        {
-            firstName: "Elif",
-            lastName: "Tekin",
-            image: "https://i.imgur.com/nRkdyKG.jpeg",
-            age: 32
-        }
-    ])
+    const [userList, setUserList] = useState([])
+
+    const getData = () => {
+
+        const url = 'https://reactpm.azurewebsites.net/api/users'
+
+        setLoading(true)
+
+        // axios promise tabanlı çalışır
+        axios.get(url)
+        .then((response) => {
+            console.log('response', response.data)
+
+            setTimeout(() => {
+                setUserList(response.data)
+                setLoading(false)
+            }, 2000)
+        })
+        .catch((err) => {
+            console.log('error', err)
+            setLoading(false)
+        })
+    }
 
     useEffect(() => {
         console.log('userList state değişti', userList)
     }, [userList, newUser])
 
     useEffect(() => {
-        console.log('uygulama ilk kez ayağa kalktı')
+        console.log('component ilk kez ayağa kalktı')
+        
+        getData()
     }, [])
 
     useEffect(() => {
@@ -110,6 +119,7 @@ const List = () => {
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Age</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -178,6 +188,11 @@ const List = () => {
                                     <td>{user.lastName}</td>
                                     <td>{user.age}</td>
                                     <td>
+                                        <Button title="Detaya Git" onClick={() => {
+                                            navigate(`/detail/${user._id}`)
+                                        }} />
+                                    </td>
+                                    <td>
                                         <Button title="Güncelle" onClick={() => {
                                             setUpdateIndex(index)
                                         }} />
@@ -194,6 +209,11 @@ const List = () => {
                     }
                 </tbody>
             </Table>
+            {
+                isLoading && (
+                    <Spinner animation="border" variant="primary" />
+                )
+            }
             <div style={{
                 marginTop: 20
             }}>
@@ -292,3 +312,32 @@ const List = () => {
 }
 
 export default List
+
+
+
+// const dummyData = [
+//     {
+//         firstName: "Kazım",
+//         lastName: "Etiksan",
+//         image: "https://i.imgur.com/rmNWp90.jpeg",
+//         age: 43
+//     },
+//     {
+//         firstName: "Leyla",
+//         lastName: "Demir",
+//         image: "https://i.imgur.com/lxzUnpb.jpeg",
+//         age: 45
+//     },
+//     {
+//         firstName: "Hasan",
+//         lastName: "Tekin",
+//         image: "https://i.imgur.com/nRkdyKG.jpeg",
+//         age: 37
+//     },
+//     {
+//         firstName: "Elif",
+//         lastName: "Tekin",
+//         image: "https://i.imgur.com/nRkdyKG.jpeg",
+//         age: 32
+//     }
+// ]
