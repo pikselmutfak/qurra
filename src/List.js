@@ -14,7 +14,24 @@ import {
 
 import Modal from "./Modal"
 
+import {
+    setAll
+} from './redux/userSlice'
+
+import {
+    useSelector, // redux state verilerine ulaşım
+    useDispatch // redux actionların tetiklenmesi
+} from 'react-redux'
+
 const List = () => {
+
+    const reduxUserList = useSelector((state) => {
+        return state.user
+    })
+
+    console.log('redux user list', reduxUserList)
+
+    const dispatch = useDispatch()
 
     const navigate = useNavigate()
 
@@ -47,10 +64,20 @@ const List = () => {
         .then((response) => {
             console.log('response', response.data)
 
-            setTimeout(() => {
-                setUserList(response.data)
-                setLoading(false)
-            }, 2000)
+            // setTimeout(() => {
+            //     setUserList(response.data)
+            //     setLoading(false)
+            // }, 2000)
+
+            // setUserList(response.data)
+            setLoading(false)
+
+            dispatch(
+                setAll(
+                    response.data
+                )
+            )
+
         })
         .catch((err) => {
             console.log('error', err)
@@ -126,7 +153,7 @@ const List = () => {
                 </thead>
                 <tbody>
                     {
-                        userList.map((user, index) => {
+                        reduxUserList.map((user, index) => {
 
                             return updateIndex === index ? (
 

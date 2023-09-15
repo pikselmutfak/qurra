@@ -6,19 +6,36 @@ import {
     useParams
 } from 'react-router-dom'
 
-const ListDetail = (props) => {
+import {
+    useSelector
+} from 'react-redux'
 
-    // console.log('props', props)
+const ListDetail = (props) => {
 
     const {_id} = useParams()
     console.log('seçili kullanıcı id', _id)
 
-    const dummy = {
-        firstName: 'Mehmet',
-        lastName: 'Demir'
-    }
+    const selectedUserLong = useSelector((state) => {
 
-    const {firstName, lastName} = dummy
+        // code
+
+        const foundUser = state.user.find((user, index) => {
+
+            // code
+            return user._id === _id
+        })
+    
+        return foundUser
+    })
+
+    const selectedUser = useSelector(state => state.user.find(user => user._id === _id))
+
+    // const dummy = {
+    //     firstName: 'Mehmet',
+    //     lastName: 'Demir'
+    // }
+
+    // const {firstName, lastName} = dummy
 
     return (
         <>
@@ -27,14 +44,14 @@ const ListDetail = (props) => {
                 flexDirection: 'row'
             }}>
                 <div>Ad</div>
-                <div>{firstName}</div>
+                <div>{selectedUser.firstName}</div>
             </div>
             <div style={{
                 display: 'flex',
                 flexDirection: 'row'
             }}>
                 <div>Soyad</div>
-                <div>{lastName}</div>
+                <div>{selectedUser.lastName}</div>
             </div>
         </>
     )
