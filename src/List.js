@@ -55,7 +55,7 @@ const List = () => {
 
     const getData = () => {
 
-        const url = 'https://reactpm.azurewebsites.net/api/users'
+        const url = '/api/users'
 
         setLoading(true)
 

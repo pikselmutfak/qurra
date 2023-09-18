@@ -6,6 +6,8 @@ import Button from './Button'
 import List from './List';
 import ListDetail from './ListDetail';
 
+import SignUp from './user/SignUp';
+
 import Demo from './Demo';
 import DemoInput from './DemoInput';
 import DemoSelect from './DemoSelect';
@@ -34,6 +36,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<List />} />
+            <Route path='/signup' element={<SignUp />} />
             <Route path='/detail/:_id' element={<ListDetail />} />
           </Routes>
         </BrowserRouter>

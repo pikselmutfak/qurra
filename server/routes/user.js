@@ -20,7 +20,6 @@ router.post('/signin', async (req, res) => {
     })
 })
 
-
 router.post('/signup', async (req, res) => {
 
     const body = _.pick(req.body, ['email', 'password', 'firstName', 'lastName', 'age'])
@@ -85,6 +84,7 @@ router.post('/user', async (req, res) => {
 router.get('/users', async (req, res) => {
 
     const users = await User.find({})
+    console.log('users found', users)
     res.send(users)
 });
 
