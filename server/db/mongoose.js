@@ -5,8 +5,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb+srv://react:QcRQXcqy4eqrdITn@cluster0.lotfigd.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     socketTimeoutMS: 5000,
-    useUnifiedTopology: true,
-    useCreateIndex: true
+    useUnifiedTopology: true
 })
 .catch((err) => {
     console.log({err})
