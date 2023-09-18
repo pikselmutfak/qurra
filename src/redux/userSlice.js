@@ -1,6 +1,9 @@
 import {
-    createSlice
+    createSlice,
+    createAsyncThunk
 } from '@reduxjs/toolkit'
+
+import axios from 'axios'
 
 const initialState = {
     list: [{
@@ -26,6 +29,7 @@ export const userSlice = createSlice({
         setAll: (state, {payload}) => {
             console.log('setAll içeriği', payload)
             // return payload
+
             state.list = payload
         },
         setXAuth: (state, {payload}) => {
@@ -39,5 +43,71 @@ export const userSlice = createSlice({
 })
 
 export const {add, setAll, setXAuth, setProfile} = userSlice.actions
+
+export const getUsers = createAsyncThunk('getUsers', async (info, { getState, dispatch }) => {
+
+    console.log('thunk params', info)
+
+    const {
+        callback
+    } = info
+
+    const url = '/api/users'
+    axios.get(url)
+    .then((response) => {
+        console.log('thunk get all', response.data)
+
+        dispatch(
+            setAll(
+                response.data
+            )
+        )
+        callback(true)
+    })
+    .catch((err) => {
+        console.log('error', err)
+        callback(false)
+    })
+})
+
+export const signIn = createAsyncThunk('signIn', async (info, { getState, dispatch }) => {
+
+    console.log('thunk params', info)
+
+    const {
+        callback,
+        email,
+        password
+    } = info
+
+    const url = '/api/signin'
+    axios.post(url, {
+        email,
+        password
+    })
+    .then((response) => {
+
+        const xauth = response.headers.xauth
+        const profile = response.data
+
+        dispatch(
+            setXAuth(
+                xauth
+            )
+        )
+
+        dispatch(
+            setProfile(
+                profile
+            )
+        )
+
+        callback(true)
+    })
+    .catch((err) => {
+        console.log('error', err)
+        callback(false)
+    })
+})
 
 export default userSlice.reducer

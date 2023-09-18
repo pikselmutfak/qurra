@@ -11,19 +11,23 @@ import Button from '../Button'
 
 import axios from 'axios'
 
-import {
-    useDispatch,
-    useSelector
-} from 'react-redux'
+// import {
+//     useDispatch,
+//     useSelector
+// } from 'react-redux'
 
-import { 
-    setXAuth,
-    setProfile
-} from '../redux/userSlice'
+// import { 
+//     setXAuth,
+//     setProfile
+// } from '../redux/userSlice'
 
 import {
     useNavigate
 } from 'react-router-dom'
+
+import { 
+    signIn 
+} from '../redux/requests'
 
 const SignIn = () => {
 
@@ -34,40 +38,40 @@ const SignIn = () => {
 
     const navigate = useNavigate()
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     
     // const xauth = useSelector(state => state.user.xauth)
     // console.log('redux token', xauth)
 
-    const signIn = () => {
+    // const signIn = () => {
 
-        const url = '/api/signin'
-        axios.post(url, userInfo)
-        .then((response) => {
-            console.log('signin response', response.data)
-            console.log('jwt token', response.headers.xauth)
+        // const url = '/api/signin'
+        // axios.post(url, userInfo)
+        // .then((response) => {
+        //     console.log('signin response', response.data)
+        //     console.log('jwt token', response.headers.xauth)
 
-            const {xauth} = response.headers
+        //     const {xauth} = response.headers
 
-            // redux güncellenecek
-            dispatch(
-                setXAuth(
-                    xauth
-                )
-            )
+        //     // redux güncellenecek
+        //     dispatch(
+        //         setXAuth(
+        //             xauth
+        //         )
+        //     )
 
-            dispatch(
-                setProfile(
-                    response.data
-                )
-            )
+        //     dispatch(
+        //         setProfile(
+        //             response.data
+        //         )
+        //     )
 
-            navigate('/')
-        })
-        .catch((err) => {
-            console.log('signin failed', err)
-        })
-    }
+        //     navigate('/')
+    //     })
+    //     .catch((err) => {
+    //         console.log('signin failed', err)
+    //     })
+    // }
 
     return (
         <>
@@ -82,7 +86,16 @@ const SignIn = () => {
                 setUserInfo(newInfo)
             }} />
             <Button title='Giriş Yap' onClick={() => {
-                    signIn()
+                    signIn({
+                        ...userInfo,
+                        callback: (isOk) => {
+                            // loader varsa kapat
+
+                            if (isOk) {
+                                navigate('/')
+                            }
+                        }
+                    })
                 }}
             />
         </>

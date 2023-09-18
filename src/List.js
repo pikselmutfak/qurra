@@ -15,25 +15,88 @@ import {
 import Modal from "./Modal"
 
 import {
-    setAll
+    setAll,
+    // getUsers
 } from './redux/userSlice'
 
 import {
-    useSelector, // redux state verilerine ulaşım
-    useDispatch // redux actionların tetiklenmesi
+    getUsers
+} from "./redux/requests"
+
+import {
+    // useSelector, // redux state verilerine ulaşım
+    // useDispatch // redux actionların tetiklenmesi
 } from 'react-redux'
+
+import {
+    useRedux
+} from "./redux/hooks"
 
 import Header from "./Header"
 
 const List = () => {
 
-    const reduxUserList = useSelector(state => state.user.list)
-    const xauth = useSelector(state => state.user.xauth)
+    const {
+        xauth,
+        list: reduxUserList
+    } = useRedux()
+
+    // const dispatch = useDispatch()
+
+    // const reduxUserList = useSelector(state => state.user.list)
+    // const xauth = useSelector(state => state.user.xauth)
+
+    const getData = () => {
+
+        setLoading(true)
+
+        getUsers({
+            callback: (isOk) => {
+                setLoading(false)
+            }
+        })
+
+        // dispatch(
+        //     getUsers({
+        //         callback: (isOk) => {
+        //             setLoading(false)
+        //         }                
+        //     })
+        // )
+
+        // const url = '/api/users'
+
+        // setLoading(true)
+
+        // // axios promise tabanlı çalışır
+        // axios.get(url)
+        // .then((response) => {
+        //     console.log('response', response.data)
+
+        //     // setTimeout(() => {
+        //     //     setUserList(response.data)
+        //     //     setLoading(false)
+        //     // }, 2000)
+
+        //     // setUserList(response.data)
+        //     setLoading(false)
+
+        //     dispatch(
+        //         setAll(
+        //             response.data
+        //         )
+        //     )
+
+        // })
+        // .catch((err) => {
+        //     console.log('error', err)
+        //     setLoading(false)
+        // })
+    }
 
     // console.log('redux user list', reduxUserList)
     console.log('list xauth', xauth)
 
-    const dispatch = useDispatch()
 
     const navigate = useNavigate()
 
@@ -55,45 +118,13 @@ const List = () => {
     const [newUser, setNewUser] = useState(newUserTemplate)
     const [userList, setUserList] = useState([])
 
-    const getData = () => {
-
-        const url = '/api/users'
-
-        setLoading(true)
-
-        // axios promise tabanlı çalışır
-        axios.get(url)
-        .then((response) => {
-            console.log('response', response.data)
-
-            // setTimeout(() => {
-            //     setUserList(response.data)
-            //     setLoading(false)
-            // }, 2000)
-
-            // setUserList(response.data)
-            setLoading(false)
-
-            dispatch(
-                setAll(
-                    response.data
-                )
-            )
-
-        })
-        .catch((err) => {
-            console.log('error', err)
-            setLoading(false)
-        })
-    }
-
     useEffect(() => {
         console.log('userList state değişti', userList)
     }, [userList, newUser])
 
     useEffect(() => {
         console.log('component ilk kez ayağa kalktı')
-        
+
         getData()
     }, [])
 
@@ -168,9 +199,9 @@ const List = () => {
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        <Form.Control 
+                                        <Form.Control
                                             placeholder="Ad"
-                                            value={newUser.firstName} 
+                                            value={newUser.firstName}
                                             onChange={(e) => {
                                                 const firstName = e.target.value
                                                 const updatedUser = {
@@ -178,12 +209,12 @@ const List = () => {
                                                     firstName
                                                 }
                                                 setNewUser(updatedUser)
-                                        }} />
+                                            }} />
                                     </td>
                                     <td>
-                                    <Form.Control 
+                                        <Form.Control
                                             placeholder="Soyad"
-                                            value={newUser.lastName} 
+                                            value={newUser.lastName}
                                             onChange={(e) => {
                                                 const lastName = e.target.value
                                                 const updatedUser = {
@@ -191,7 +222,7 @@ const List = () => {
                                                     lastName
                                                 }
                                                 setNewUser(updatedUser)
-                                        }} />
+                                            }} />
                                     </td>
                                     <td></td>
                                     <td>
@@ -206,7 +237,7 @@ const List = () => {
 
                             ) : (
                                 <tr>
-                                    <td>{index+1}</td>
+                                    <td>{index + 1}</td>
                                     <td>
                                         <img
                                             src={user.image}
@@ -323,9 +354,9 @@ const List = () => {
                     }
                 </div>
             </div>
-            <Modal 
-                title="Emin misin ?" 
-                body={`${userList[removeIndex]?.firstName} silinecektir.`}  
+            <Modal
+                title="Emin misin ?"
+                body={`${userList[removeIndex]?.firstName} silinecektir.`}
                 show={showModal}
                 onClose={(isOk) => {
 
