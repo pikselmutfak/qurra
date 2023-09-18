@@ -11,12 +11,33 @@ import Button from '../Button'
 
 import axios from 'axios'
 
+import {
+    useDispatch,
+    useSelector
+} from 'react-redux'
+
+import { 
+    setXAuth,
+    setProfile
+} from '../redux/userSlice'
+
+import {
+    useNavigate
+} from 'react-router-dom'
+
 const SignIn = () => {
 
     const [userInfo, setUserInfo] = useState({
-        password: "",
-        email: ""
+        email: "kazim@etiksan.com",
+        password: "12345"
     })
+
+    const navigate = useNavigate()
+
+    const dispatch = useDispatch()
+    
+    // const xauth = useSelector(state => state.user.xauth)
+    // console.log('redux token', xauth)
 
     const signIn = () => {
 
@@ -24,6 +45,24 @@ const SignIn = () => {
         axios.post(url, userInfo)
         .then((response) => {
             console.log('signin response', response.data)
+            console.log('jwt token', response.headers.xauth)
+
+            const {xauth} = response.headers
+
+            // redux güncellenecek
+            dispatch(
+                setXAuth(
+                    xauth
+                )
+            )
+
+            dispatch(
+                setProfile(
+                    response.data
+                )
+            )
+
+            navigate('/')
         })
         .catch((err) => {
             console.log('signin failed', err)

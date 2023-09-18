@@ -23,13 +23,15 @@ import {
     useDispatch // redux actionların tetiklenmesi
 } from 'react-redux'
 
+import Header from "./Header"
+
 const List = () => {
 
-    const reduxUserList = useSelector((state) => {
-        return state.user
-    })
+    const reduxUserList = useSelector(state => state.user.list)
+    const xauth = useSelector(state => state.user.xauth)
 
-    console.log('redux user list', reduxUserList)
+    // console.log('redux user list', reduxUserList)
+    console.log('list xauth', xauth)
 
     const dispatch = useDispatch()
 
@@ -131,6 +133,11 @@ const List = () => {
 
     return (
         <>
+            {
+                xauth && (
+                    <Header />
+                )
+            }
             {
                 selectedUser && (
                     <div>

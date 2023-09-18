@@ -7,6 +7,7 @@ import List from './List';
 import ListDetail from './ListDetail';
 
 import SignUp from './user/SignUp';
+import SignIn from './user/SignIn';
 
 import Demo from './Demo';
 import DemoInput from './DemoInput';
@@ -37,6 +38,7 @@ const App = () => {
           <Routes>
             <Route path='/' element={<List />} />
             <Route path='/signup' element={<SignUp />} />
+            <Route path='/signin' element={<SignIn />} />
             <Route path='/detail/:_id' element={<ListDetail />} />
           </Routes>
         </BrowserRouter>
