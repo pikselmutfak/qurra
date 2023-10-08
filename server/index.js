@@ -12,6 +12,9 @@ app.use(bodyParser.json());
 const routeUser = require('./routes/user');
 app.use('/api',routeUser);
 
+const routeCode = require('./routes/code');
+app.use('/api/code',routeCode);
+
 app.listen(8080, () => {
     console.log('started');
 });

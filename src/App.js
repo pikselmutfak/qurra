@@ -1,13 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
-
 import Button from './Button'
 
 import List from './List';
 import ListDetail from './ListDetail';
 
-import SignUp from './user/SignUp';
-import SignIn from './user/SignIn';
+import SignUp from './SignUp';
+import SignIn from './SignIn';
+import Home from './Home';
 
 import Demo from './Demo';
 import DemoInput from './DemoInput';
@@ -27,7 +25,20 @@ import {
   Provider
 } from 'react-redux'
 
+import { setXAuth } from './redux/userSlice';
+
+import { getMe } from './redux/requests';
+
 const App = () => {
+
+  const localAuth = sessionStorage.getItem('xauth')
+  if (localAuth !== null) {
+    getMe({
+      callback: () => {},
+      localAuth
+    })
+  }
+
   return (
 
     <div style={{
@@ -36,7 +47,7 @@ const App = () => {
       <Provider store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<List />} />
+            <Route path='/' element={<Home />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/detail/:_id' element={<ListDetail />} />

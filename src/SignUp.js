@@ -7,16 +7,14 @@ import {
     useEffect
 } from 'react'
 
-import Button from '../Button'
+import Button from './Button'
 
 import axios from 'axios'
 
 const SignUp = () => {
 
     const [userInfo, setUserInfo] = useState({
-        firstName: "",
-        lastName: "",
-        age: "",
+        name: "",
         password: "",
         email: ""
     })
@@ -49,19 +47,9 @@ const SignUp = () => {
                 const newInfo = {...userInfo, password}
                 setUserInfo(newInfo)
             }} />
-            <Form.Control placeholder="Ad" value={userInfo.firstName} onChange={(e) => {
-                const firstName = e.target.value
-                const newInfo = {...userInfo, firstName}
-                setUserInfo(newInfo)
-            }} />
-            <Form.Control placeholder="Soyad" value={userInfo.lastName} onChange={(e) => {
-                const lastName = e.target.value
-                const newInfo = {...userInfo, lastName}
-                setUserInfo(newInfo)
-            }} />
-            <Form.Control placeholder="Yaş" value={userInfo.age} onChange={(e) => {
-                const age = e.target.value
-                const newInfo = {...userInfo, age}
+            <Form.Control placeholder="Ad Soyad" value={userInfo.name} onChange={(e) => {
+                const name = e.target.value
+                const newInfo = {...userInfo, name}
                 setUserInfo(newInfo)
             }} />
             <Button title='Kaydet' onClick={() => {

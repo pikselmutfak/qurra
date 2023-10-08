@@ -7,7 +7,7 @@ import {
     useEffect
 } from 'react'
 
-import Button from '../Button'
+import Button from './Button'
 
 import axios from 'axios'
 
@@ -27,7 +27,7 @@ import {
 
 import { 
     signIn 
-} from '../redux/requests'
+} from './redux/requests'
 
 const SignIn = () => {
 

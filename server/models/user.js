@@ -7,14 +7,8 @@ const secretWord = 's@me!secret'
 
 
 const UserSchema = new mongoose.Schema({
-  firstName: {
+  name: {
     type: String
-  },
-  lastName: {
-    type: String
-  },
-  age: {
-    type: Number
   },
   email: {
     type: String
@@ -147,7 +141,7 @@ UserSchema.methods.toJSON = function () {
 
   const oObject = o.toObject();
 
-  return _.pick(oObject, ['_id', 'firstName', 'lastName', 'age', 'createdAt', 'email']);
+  return _.pick(oObject, ['_id', 'name', 'createdAt', 'email']);
 };
 
 const User = mongoose.model('User', UserSchema);

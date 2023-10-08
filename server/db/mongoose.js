@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb+srv://react:QcRQXcqy4eqrdITn@cluster0.lotfigd.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://qurra:glZtKQkHQ2ljyOJu@cluster0.razm1bi.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     socketTimeoutMS: 5000,
     useUnifiedTopology: true

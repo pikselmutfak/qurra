@@ -20,7 +20,7 @@ import {
 } from './redux/userSlice'
 
 import {
-    getUsers
+    getMe as getUsers
 } from "./redux/requests"
 
 import {

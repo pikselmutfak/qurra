@@ -6,11 +6,7 @@ import {
 import axios from 'axios'
 
 const initialState = {
-    list: [{
-        firstName: "Redux",
-        lastName: "Demo",
-        age: 42
-    }],
+    codes: [],
     xauth: undefined,
     profile: undefined
 }
@@ -35,33 +31,50 @@ export const userSlice = createSlice({
         setXAuth: (state, {payload}) => {
             console.log('xauth payload', payload)
             state.xauth = payload
+
+            sessionStorage.setItem('xauth', payload)
         },
         setProfile: (state, {payload}) => {
             state.profile = payload
+        },
+        setCodes: (state, {payload}) => {
+            state.codes = payload
         }
     }
 })
 
-export const {add, setAll, setXAuth, setProfile} = userSlice.actions
+export const {add, setAll, setXAuth, setProfile, setCodes} = userSlice.actions
 
-export const getUsers = createAsyncThunk('getUsers', async (info, { getState, dispatch }) => {
+export const getMe = createAsyncThunk('getMe', async (info, { getState, dispatch }) => {
 
     console.log('thunk params', info)
 
     const {
-        callback
+        callback,
+        localAuth
     } = info
 
-    const url = '/api/users'
-    axios.get(url)
+    dispatch(
+        setXAuth(
+            localAuth
+        )
+    )
+
+    const url = '/api/user/me'
+    axios.get(url, {
+        headers: {
+            xauth: localAuth
+        }
+    })
     .then((response) => {
         console.log('thunk get all', response.data)
 
         dispatch(
-            setAll(
+            setProfile(
                 response.data
             )
         )
+
         callback(true)
     })
     .catch((err) => {
@@ -99,6 +112,75 @@ export const signIn = createAsyncThunk('signIn', async (info, { getState, dispat
         dispatch(
             setProfile(
                 profile
+            )
+        )
+
+        callback(true)
+    })
+    .catch((err) => {
+        console.log('error', err)
+        callback(false)
+    })
+})
+
+export const generateQR = createAsyncThunk('generateQR', async (info, { getState, dispatch }) => {
+
+    console.log('thunk params', info)
+
+    const {user: {xauth}} = getState()
+
+    console.log('slice xauth', xauth)
+
+    const {
+        callback,
+    } = info
+
+    const url = '/api/code/new'
+    axios.post(url, {}, {
+        headers: {
+            xauth
+        }
+    })
+    .then((response) => {
+
+        const codes = response.data
+
+        dispatch(
+            setCodes(
+                codes
+            )
+        )
+
+        callback(true)
+    })
+    .catch((err) => {
+        console.log('error', err)
+        callback(false)
+    })
+})
+
+export const getMyCodes = createAsyncThunk('getMyCodes', async (info, { getState, dispatch }) => {
+
+    console.log('thunk params get codes', info)
+
+    const {
+        callback,
+    } = info
+
+    const {user: {xauth}} = getState()
+
+    const url = '/api/code/'
+    axios.get(url, {
+        headers: {
+            xauth
+        }
+    })
+    .then((response) => {
+        console.log('thunk get codes', response.data)
+
+        dispatch(
+            setCodes(
+                response.data
             )
         )
 

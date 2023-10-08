@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const { User } = require('../models/user')
+const { Code } = require('../models/code')
 
 const _ = require('lodash');
+
+const { authenticate } = require('../middleware/authenticate')
 
 router.post('/signin', async (req, res) => {
 
@@ -22,7 +25,7 @@ router.post('/signin', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
 
-    const body = _.pick(req.body, ['email', 'password', 'firstName', 'lastName', 'age'])
+    const body = _.pick(req.body, ['email', 'password', 'name'])
 
     const obj = new User({
         ...body,
@@ -58,7 +61,7 @@ router.delete('/user/:_id', async (req, res) => {
 
 router.patch('/user/:_id', async (req, res) => {
 
-    const body = _.pick(req.body, ['firstName', 'lastName', 'age'])
+    const body = _.pick(req.body, ['name'])
 
     const obj = await User.findOneAndUpdate({
         _id: req.params._id
@@ -71,21 +74,16 @@ router.patch('/user/:_id', async (req, res) => {
     res.send(obj)
 });
 
-router.post('/user', async (req, res) => {
-
-    const body = _.pick(req.body, ['firstName', 'lastName', 'age'])
-
-    const obj = new User(body)
-    await obj.save()
-
-    res.send(obj)
-});
-
 router.get('/users', async (req, res) => {
 
     const users = await User.find({})
     console.log('users found', users)
     res.send(users)
+});
+
+router.get('/user/me', authenticate, async (req, res) => {
+
+    res.send(req.user)
 });
 
 module.exports = router;

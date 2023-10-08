@@ -5,5 +5,7 @@ import {
 } from './store'
 
 
-export const getUsers = (info) => store.dispatch(userSlice.getUsers(info))
+export const getMe = (info) => store.dispatch(userSlice.getMe(info))
 export const signIn = (info) => store.dispatch(userSlice.signIn(info))
+export const generateQR = (info) => store.dispatch(userSlice.generateQR(info))
+export const getMyCodes = (info) => store.dispatch(userSlice.getMyCodes(info))
