@@ -34,7 +34,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "local": "run-p backend frontend"
+    "local": "run-p backend frontend",
+    "start": "node server/index.js"
   },
   "eslintConfig": {
     "extends": [
