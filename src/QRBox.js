@@ -12,7 +12,7 @@ import axios from 'axios'
 
 import { useRedux } from './redux/hooks'
 
-import {Navigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 import { generateQR } from './redux/requests'
 
@@ -23,6 +23,8 @@ const QRBox = ({
     const {xauth, profile} = useRedux()
 
     const [qr, setQR] = useState(undefined)
+
+    const navigate = useNavigate()
 
     const loadQR = () => {
 
@@ -48,10 +50,14 @@ const QRBox = ({
 
     return (
         <>
-            <div>{code._id}</div>
             {
                 qr && (
-                    <Image src={qr} />
+                    <>
+                        <Image src={qr} />
+                        <Button onClick={() => {
+                            navigate('/edit/'+code._id)
+                        }}>Edit</Button>
+                    </>
                 )
             }
         </>

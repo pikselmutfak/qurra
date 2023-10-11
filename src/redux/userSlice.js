@@ -192,4 +192,48 @@ export const getMyCodes = createAsyncThunk('getMyCodes', async (info, { getState
     })
 })
 
+export const saveContext = createAsyncThunk('saveContext', async (info, { getState, dispatch }) => {
+
+    console.log('saveContext params', info)
+
+    const {
+        callback,
+        context,
+        _id
+    } = info
+
+    const url = '/api/code/'+_id
+    axios.patch(url, {
+        context
+    })
+    .then((response) => {
+
+        callback(response.data)
+    })
+    .catch((err) => {
+        console.log('error', err)
+        callback(false)
+    })
+})
+
+export const retrieveCode = createAsyncThunk('retrieveCode', async (info, { getState, dispatch }) => {
+
+    const {
+        callback,
+        identifier
+    } = info
+
+    const url = '/api/code/retrieve/'+identifier
+    axios.get(url)
+    .then((response) => {
+        console.log('thunk get codes', response.data)
+
+        callback(response.data)
+    })
+    .catch((err) => {
+        console.log('error', err)
+        callback(false)
+    })
+})
+
 export default userSlice.reducer

@@ -18,6 +18,16 @@ router.get('/', authenticate, async (req, res) => {
     res.send(all)
 })
 
+router.get('/retrieve/:identifier', async (req, res) => {
+
+    const {identifier} = req.params
+    const found = await Code.findOne({
+        identifier
+    })
+
+    res.send(found)
+})
+
 router.post('/new', authenticate, async (req, res) => {
 
     const obj = new Code({
@@ -48,14 +58,31 @@ router.post('/new', authenticate, async (req, res) => {
 router.get('/qr/:_id', async (req, res) => {
 
     const {_id} = req.params
-
-    const qr = await qrcode.toDataURL(JSON.stringify({
+    const found = await Code.findOne({
         _id
-    }))
+    })
+
+    const qr = await qrcode.toDataURL('https://qurra.azurewebsites.net/land/'+found.identifier)
 
     res.send({
         qr
     })
+});
+
+router.patch('/:_id', async (req, res) => {
+
+    const {_id} = req.params
+    const body = _.pick(req.body, ['context'])
+
+    const obj = await Code.findOneAndUpdate({
+        _id
+    }, {
+        ...body
+    }, {
+        new: true
+    })
+
+    res.send(obj)
 });
 
 module.exports = router;

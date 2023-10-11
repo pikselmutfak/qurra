@@ -1,15 +1,6 @@
-import Button from './Button'
-
-import List from './List';
-import ListDetail from './ListDetail';
-
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import Home from './Home';
-
-import Demo from './Demo';
-import DemoInput from './DemoInput';
-import DemoSelect from './DemoSelect';
 
 import {
   BrowserRouter,
@@ -27,7 +18,10 @@ import {
 
 import { setXAuth } from './redux/userSlice';
 
-import { getMe } from './redux/requests';
+import { getMe, getMyCodes } from './redux/requests';
+import NotFound from './NotFound';
+import Land from './Land';
+import Edit from './Edit';
 
 const App = () => {
 
@@ -37,6 +31,13 @@ const App = () => {
       callback: () => {},
       localAuth
     })
+
+    getMyCodes({
+      callback: () => {
+
+      }
+    })
+
   }
 
   return (
@@ -50,7 +51,9 @@ const App = () => {
             <Route path='/' element={<Home />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/signin' element={<SignIn />} />
-            <Route path='/detail/:_id' element={<ListDetail />} />
+            <Route path='/edit/:_id' element={<Edit />} />
+            <Route path='/land/:identifier' element={<Land />} />
+            <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </Provider>

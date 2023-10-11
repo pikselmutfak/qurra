@@ -12,14 +12,6 @@ import { useEffect } from 'react'
 
 const Home = () => {
 
-    useEffect(() => {
-        getMyCodes({
-            callback: () => {
-
-            }
-        })
-    }, [])
-
     const {xauth, profile, codes} = useRedux()
 
     if (!xauth) {
