@@ -83,7 +83,14 @@ router.get('/users', async (req, res) => {
 
 router.get('/user/me', authenticate, async (req, res) => {
 
-    res.send(req.user)
+    const codes = await Code.find({
+        owner: req.user._id
+    })
+
+    res.send({
+        profile: req.user,
+        codes
+    })
 });
 
 module.exports = router;

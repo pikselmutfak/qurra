@@ -21,8 +21,11 @@ const Land = () => {
                 console.log('landed', obj)
 
                 const filtered = obj.context.filter(c => c.active === true)
-
-                setContext(filtered)
+                if (filtered.length === 1) {
+                    window.location.href = filtered[0].url
+                } else {
+                    setContext(filtered)
+                }
             }
         })
     }, [])
@@ -32,7 +35,19 @@ const Land = () => {
             <div>
             {
                 context.map((c, index) => (
-                    <div><a href={c.url}>{c.title}</a></div>
+                    <a href={c.url} style={{
+                        textDecoration: 'none'
+                    }}>
+                        <div style={{
+                            height: 80,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}>
+                            <div>{c.title}</div>
+                            <div>-</div>
+                        </div>
+                    </a>
                 ))
             }
             </div>

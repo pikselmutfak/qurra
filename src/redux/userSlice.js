@@ -39,11 +39,14 @@ export const userSlice = createSlice({
         },
         setCodes: (state, {payload}) => {
             state.codes = payload
+        },
+        signOut: (state, {payload}) => {
+            return initialState
         }
     }
 })
 
-export const {add, setAll, setXAuth, setProfile, setCodes} = userSlice.actions
+export const {add, setAll, setXAuth, setProfile, setCodes, signOut} = userSlice.actions
 
 export const getMe = createAsyncThunk('getMe', async (info, { getState, dispatch }) => {
 
@@ -71,7 +74,13 @@ export const getMe = createAsyncThunk('getMe', async (info, { getState, dispatch
 
         dispatch(
             setProfile(
-                response.data
+                response.data.profile
+            )
+        )
+
+        dispatch(
+            setCodes(
+                response.data.codes
             )
         )
 

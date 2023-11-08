@@ -1,10 +1,12 @@
-import { useParams, Navigate } from "react-router-dom"
+import { useParams, Navigate, useNavigate } from "react-router-dom"
 import { useRedux } from "./redux/hooks"
 import { Table, InputGroup, Form, DropdownButton, Dropdown, Button } from "react-bootstrap"
 import { useState, Fragment, useEffect } from "react"
 import { saveContext } from "./redux/requests"
 
 const Edit = () => {
+
+    const navigate = useNavigate()
 
     const { xauth, codes } = useRedux()
     const { _id } = useParams()
@@ -163,7 +165,7 @@ const Edit = () => {
             }
             <div style={{
                 marginTop: 10,
-                width: 180,
+                width: 280,
                 display: 'flex',
                 justifyContent: 'space-between'
             }}>
@@ -182,6 +184,9 @@ const Edit = () => {
                         _id
                     })
                 }}>Kaydet</Button>
+                <Button variant="secondary" onClick={() => {
+                    navigate("/")
+                }}>Anasayfa</Button>
             </div>
         </>
     )

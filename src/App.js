@@ -32,11 +32,11 @@ const App = () => {
       localAuth
     })
 
-    getMyCodes({
-      callback: () => {
+    // getMyCodes({
+    //   callback: () => {
 
-      }
-    })
+    //   }
+    // })
 
   }
 

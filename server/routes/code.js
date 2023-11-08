@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const { User } = require('../models/user')
+const {config} = require('../config')
+
+const { Log } = require('../models/log')
 const { Code } = require('../models/code')
 
 const _ = require('lodash');
@@ -20,12 +22,28 @@ router.get('/', authenticate, async (req, res) => {
 
 router.get('/retrieve/:identifier', async (req, res) => {
 
+    console.log(req.headers)
     const {identifier} = req.params
+
+    const newLog = new Log({
+        identifier,
+        requestedBy: req.headers['x-forwarded-for'],
+        userAgent: req.headers['user-agent']
+    })
+
+    await newLog.save()
+
     const found = await Code.findOne({
         identifier
     })
 
     res.send(found)
+})
+
+router.get('/land', async (req, res) => {
+
+    console.log(req.headers)
+    res.sendStatus(200)
 })
 
 router.post('/new', authenticate, async (req, res) => {
@@ -62,7 +80,7 @@ router.get('/qr/:_id', async (req, res) => {
         _id
     })
 
-    const qr = await qrcode.toDataURL('https://qurra.azurewebsites.net/land/'+found.identifier)
+    const qr = await qrcode.toDataURL(`${config.root}/land/`+found.identifier)
 
     res.send({
         qr
