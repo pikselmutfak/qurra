@@ -16,7 +16,10 @@ const CodeSchema = new mongoose.Schema({
       value: String
     },
     active: Boolean,
-    url: String,
+    url: {
+      ios: String,
+      android: String
+    },
     title: String
   }],
   createdAt: {

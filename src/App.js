@@ -22,6 +22,7 @@ import { getMe, getMyCodes } from './redux/requests';
 import NotFound from './NotFound';
 import Land from './Land';
 import Edit from './Edit';
+import Share from './Share';
 
 const App = () => {
 
@@ -53,6 +54,7 @@ const App = () => {
             <Route path='/signin' element={<SignIn />} />
             <Route path='/edit/:_id' element={<Edit />} />
             <Route path='/land/:identifier' element={<Land />} />
+            <Route path='/share' element={<Share />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>

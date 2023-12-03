@@ -32,7 +32,10 @@ const Edit = () => {
 
     const infoTemplate = {
         platform: options[0],
-        url: '',
+        url: {
+            ios: '',
+            android: ''
+        },
         active: false,
         title: ''
     }
@@ -145,7 +148,10 @@ const Edit = () => {
 
                                         return {
                                             ...u,
-                                            url
+                                            url: {
+                                                ...u.url,
+                                                ios: url
+                                            }
                                         }
                                     }
 
@@ -153,7 +159,27 @@ const Edit = () => {
                                 })
 
                                 setContext(updated)
-                            }} value={row.url} />
+                            }} value={row.url.ios} />
+                            <Form.Control onChange={(e) => {
+                                const url = e.target.value
+                                const updated = context.map((u, ui) => {
+
+                                    if (ui === index) {
+
+                                        return {
+                                            ...u,
+                                            url: {
+                                                ...u.url,
+                                                android: url
+                                            }
+                                        }
+                                    }
+
+                                    return u
+                                })
+
+                                setContext(updated)
+                            }} value={row.url.android} />
                             <Button variant="danger" onClick={() => {
 
                                 const updated = context.filter((u, ui) => ui !== index)

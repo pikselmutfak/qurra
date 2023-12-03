@@ -22,13 +22,20 @@ const Land = () => {
 
                 const filtered = obj.context.filter(c => c.active === true)
                 if (filtered.length === 1) {
-                    window.location.href = filtered[0].url
+                    window.location.href = filtered[0].url[getOS()]
                 } else {
                     setContext(filtered)
                 }
             }
         })
     }, [])
+
+    const getOS = () => {
+        if (window.navigator.userAgent.includes('Android')) {
+            return 'android'
+        }
+        return 'ios'
+    }
 
     return (
         <>
